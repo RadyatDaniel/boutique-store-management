@@ -7,7 +7,11 @@
 namespace App\Core;
 
 class Database
-{
+{    /**
+     * Singleton instance
+     */
+
+    private static $instance = null;   
     /**
      * MySQLi connection instance
      */
@@ -36,7 +40,7 @@ class Database
     /**
      * Constructor - Initialize database connection
      */
-    public function __construct($config = [])
+    private function __construct($config = [])
     {
         $this->config = $config ?: [
             'host' => DB_HOST,
@@ -48,7 +52,18 @@ class Database
 
         $this->connect();
     }
+    /**
+     * Get singleton instance
+     */
+    public static function getInstance($config = [])
+{
+    if (self::$instance === null) {
+        self::$instance = new self($config);
+    }
+    return self::$instance;
+}
 
+    
     /**
      * Establish database connection
      */
@@ -164,6 +179,17 @@ class Database
         }
         return $results;
     }
+    /**
+     * Fetch single value
+     */
+    public function fetchColumn()
+    {
+        if ($this->result) {
+            $row = $this->result->fetch_array(MYSQLI_NUM);
+            return $row ? $row[0] : null;
+        }
+        return null;
+    }
 
     /**
      * Get number of affected rows
@@ -277,6 +303,7 @@ class Database
     {
         if ($this->connection) {
             $this->connection->close();
+            $this->connection = null;
         }
     }
 
