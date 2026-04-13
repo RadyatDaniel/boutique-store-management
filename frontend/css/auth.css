@@ -18,3 +18,27 @@
   border-radius: var(--radius-xl);
   box-shadow: 0 4px 24px rgba(0,0,0,0.06);
 }
+
+/* Responsive: Tablet */
+@media (max-width: 992px) {
+  .auth-container {
+    padding: var(--space-xl) 0;
+  }
+  .auth-form {
+    max-width: 90vw;
+    padding: var(--space-xl);
+  }
+}
+
+/* Responsive: Mobile */
+@media (max-width: 600px) {
+  .auth-container {
+    padding: var(--space-lg) 0;
+  }
+  .auth-form {
+    max-width: 100vw;
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    box-shadow: none;
+  }
+}

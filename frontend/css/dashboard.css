@@ -106,6 +106,29 @@
   cursor: pointer;
 }
 
+@media (max-width: 600px) {
+  .topbar-right {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-md);
+    padding: var(--space-sm) 0;
+  }
+  .user-profile {
+    padding: var(--space-sm) 0;
+    border-radius: var(--radius-lg);
+    background: var(--bg-primary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    margin-bottom: var(--space-sm);
+  }
+  .branch-name {
+    display: block;
+    margin-bottom: var(--space-xs);
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.01em;
+  }
+}
+
 .avatar {
   width: 36px;
   height: 36px;
@@ -220,6 +243,37 @@
   .sidebar.open { transform: translateX(0); }
   .content-area { padding: var(--space-md); }
   .widget-grid { grid-template-columns: 1fr; }
+}
+
+/* Extra: Make header and nav responsive */
+@media (max-width: 768px) {
+  .header, .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-sm);
+  }
+  .navbar {
+    padding: var(--space-sm) 0;
+  }
+}
+
+/* Improve table and card overflow for mobile */
+@media (max-width: 600px) {
+  .content-area, .data-panel, .pos-container {
+    padding: var(--space-sm);
+  }
+  .dashboard-table, .data-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    font-size: 0.95rem;
+  }
+  .product-card {
+    padding: var(--space-sm);
+  }
+  .product-img {
+    height: 120px;
+  }
 }
 
 /* POS */

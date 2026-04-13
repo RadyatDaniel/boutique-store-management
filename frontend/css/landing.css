@@ -88,6 +88,38 @@
   .features-grid { grid-template-columns: 1fr; }
 }
 
+/* Extra: Make hero, nav, and split-sections more responsive */
+@media (max-width: 768px) {
+  .hero-section, .split-section {
+    padding: var(--space-lg) 0;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+  .hero-content, .split-text {
+    text-align: center;
+    padding: 0 var(--space-sm);
+  }
+  .img-card img {
+    height: 180px;
+    object-fit: cover;
+  }
+}
+
+@media (max-width: 600px) {
+  .site-footer, .stats-bar {
+    padding: var(--space-md) 0;
+  }
+  .footer-grid, .stats-grid {
+    gap: var(--space-sm);
+  }
+  .feature-card {
+    padding: var(--space-md);
+  }
+  .img-card img {
+    height: 120px;
+  }
+}
+
 .feature-card {
   padding: 2.5rem 2rem;
   border-radius: var(--radius-xl);
