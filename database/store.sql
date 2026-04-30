@@ -3,6 +3,9 @@
 -- MySQL Database Schema
 -- ============================================
 
+CREATE DATABASE IF NOT EXISTS `boutique_test`;
+USE `boutique_test`;
+
 -- ============================================
 -- ROLES TABLE (
 -- ============================================
