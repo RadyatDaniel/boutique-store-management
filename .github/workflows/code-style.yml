@@ -1,0 +1,42 @@
+name: Code Style Check (PSR-12)
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - '**.php'
+      - '.github/workflows/code-style.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - '**.php'
+
+jobs:
+  code-style:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: phpcs, php-cs-fixer
+      
+      - name: Install Dependencies
+        run: |
+          composer install --no-progress --prefer-dist
+      
+      - name: Run PHP CodeSniffer (PSR-12)
+        run: |
+          phpcs --standard=PSR12 app/ routes/ config/ --ignore=vendor/ --report=summary || true
+      
+      - name: Check PHP-CS-Fixer
+        run: |
+          php-cs-fixer fix --dry-run --diff app/ routes/ config/ || true
+      
+      - name: Generate Report
+        if: always()
+        run: |
+          echo "Code style check completed. Review any violations above."

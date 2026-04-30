@@ -1,0 +1,48 @@
+name: MySQL Schema Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'database/store.sql'
+      - '.github/workflows/schema-validation.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'database/store.sql'
+
+jobs:
+  schema-validation:
+    runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: boutique_test
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 3306:3306
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Validate SQL Syntax
+        run: |
+          echo "Validating SQL schema..."
+          mysql -h 127.0.0.1 -uroot -proot < database/store.sql
+          if [ $? -eq 0 ]; then
+            echo "✓ Schema validation passed"
+          else
+            echo "✗ Schema validation failed"
+            exit 1
+          fi
+      
+      - name: Check Schema Structure
+        run: |
+          mysql -h 127.0.0.1 -uroot -proot boutique_test -e "SHOW TABLES;"

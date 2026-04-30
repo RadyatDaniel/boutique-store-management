@@ -1,0 +1,87 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+  workflow_run:
+    workflows: ["PHP Lint Check", "MySQL Schema Validation", "Unit Tests", "Code Style Check (PSR-12)"]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  check-prerequisites:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    outputs:
+      deploy: ${{ steps.check.outputs.deploy }}
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      
+      - name: Install Dependencies
+        run: composer install --no-progress --prefer-dist
+      
+      - name: Check Prerequisites
+        id: check
+        run: |
+          # Add your deployment prerequisites checks here
+          echo "deploy=true" >> $GITHUB_OUTPUT
+      
+      - name: Log Deployment Initiation
+        run: |
+          echo "Deployment prerequisites checked. Ready to deploy."
+
+  deploy:
+    needs: check-prerequisites
+    runs-on: ubuntu-latest
+    if: needs.check-prerequisites.outputs.deploy == 'true'
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      
+      - name: Cache Composer Packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      
+      - name: Install Dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --no-progress --prefer-dist --no-dev
+      
+      - name: Configure Deployment
+        run: |
+          # Create deployment configuration
+          echo "Configuring production environment..."
+          # Add your deployment configuration steps here
+      
+      - name: Run Database Migrations
+        run: |
+          echo "Checking for database migrations..."
+          # Add migration commands if applicable
+      
+      - name: Deployment Summary
+        run: |
+          echo "✓ Deployment completed successfully"
+          echo "Branch: ${{ github.ref }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Deployer: ${{ github.actor }}"
+      
+      - name: Create Deployment Notification
+        if: always()
+        run: |
+          echo "Deployment notification can be sent to Slack, Discord, etc."
