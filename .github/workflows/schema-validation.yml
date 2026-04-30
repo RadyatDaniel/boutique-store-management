@@ -32,11 +32,23 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
+      - name: Wait for MySQL
+        run: |
+          for i in {1..30}; do
+            if mysql -h 127.0.0.1 -uroot -proot -e "SELECT 1" 2>/dev/null; then
+              echo "✓ MySQL is ready"
+              exit 0
+            fi
+            echo "Waiting for MySQL... ($i/30)"
+            sleep 1
+          done
+          echo "✗ MySQL failed to start"
+          exit 1
+      
       - name: Validate SQL Syntax
         run: |
           echo "Validating SQL schema..."
-          mysql -h 127.0.0.1 -uroot -proot < database/store.sql
-          if [ $? -eq 0 ]; then
+          if mysql -h 127.0.0.1 -uroot -proot < database/store.sql; then
             echo "✓ Schema validation passed"
           else
             echo "✗ Schema validation failed"
