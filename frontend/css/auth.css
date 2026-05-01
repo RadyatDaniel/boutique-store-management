@@ -17,10 +17,11 @@
 
 /* Responsive: Tablet */
 @media (max-width: 992px) {
-  .authcontainer {
+  .auth-container {
     padding: var(--space-xl) 0;
   }
-  .authform {
+
+  .auth-form {
     max-width: 90vw;
     padding: var(--space-xl);
   }
@@ -28,10 +29,11 @@
 
 /* Responsive: Mobile */
 @media (max-width: 600px) {
-  .authcontainer {
+  .auth-container {
     padding: var(--space-lg) 0;
   }
-  .authform {
+
+  .auth-form {
     max-width: 100vw;
     padding: var(--space-md);
     border-radius: var(--radius-md);
