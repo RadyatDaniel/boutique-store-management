@@ -28,11 +28,7 @@ jobs:
         run: |
           composer install --no-progress --prefer-dist
       
-      - name: Run PHP CodeSniffer (PSR-12)
-        run: |
-          phpcs --standard=PSR12 app/ routes/ config/ --ignore=vendor/ --report=summary
-      
-      - name: Check PHP-CS-Fixer
+      - name: Check PHP-CS-Fixer (PSR-12)
         run: |
           php-cs-fixer fix --dry-run --diff app/ routes/ config/
       
