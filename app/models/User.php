@@ -1,4 +1,5 @@
 <?php
+
 /**
  * User Model
  */
@@ -47,7 +48,7 @@ class User extends Model
     public function hasPermission($permission)
     {
         $permissions = $this->getPermissions();
-        return in_array($permission, $permissions);
+        return in_array($permission, $permissions, true);
     }
 
     /**
@@ -99,11 +100,11 @@ class User extends Model
     public function incrementLoginAttempts()
     {
         $this->login_attempts++;
-        
+
         if ($this->login_attempts >= AUTH_MAX_LOGIN_ATTEMPTS) {
             $this->locked_until = date('Y-m-d H:i:s', time() + AUTH_LOCKOUT_DURATION);
         }
-        
+
         return $this->save();
     }
 
@@ -137,4 +138,3 @@ class User extends Model
         return $this->save();
     }
 }
-?>

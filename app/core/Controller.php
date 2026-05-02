@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base Controller Class
  * All controllers extend from this base class
@@ -68,7 +69,7 @@ class Controller
         $role = $this->user['role'] ?? null;
         $permissions = ROLE_PERMISSIONS[$role] ?? [];
 
-        return in_array($permission, $permissions);
+        return in_array($permission, $permissions, true);
     }
 
     /**
@@ -143,7 +144,7 @@ class Controller
     protected function abort($code, $message = '')
     {
         http_response_code($code);
-        
+
         if (APP_DEBUG) {
             die("[{$code}] {$message}");
         } else {
@@ -153,7 +154,7 @@ class Controller
                 include $errorView;
             }
         }
-        
+
         exit;
     }
 
@@ -280,4 +281,3 @@ class Controller
         return $this->db->connection->real_escape_string($string);
     }
 }
-?>

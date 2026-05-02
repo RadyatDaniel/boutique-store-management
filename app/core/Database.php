@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Database Class - MySQLi Connection & Query Builder
  * Handles database connectivity and basic query operations
@@ -7,11 +8,12 @@
 namespace App\Core;
 
 class Database
-{    /**
+{
+    /**
      * Singleton instance
      */
 
-    private static $instance = null;   
+    private static $instance = null;
     /**
      * MySQLi connection instance
      */
@@ -56,14 +58,14 @@ class Database
      * Get singleton instance
      */
     public static function getInstance($config = [])
-{
-    if (self::$instance === null) {
-        self::$instance = new self($config);
+    {
+        if (self::$instance === null) {
+            self::$instance = new self($config);
+        }
+        return self::$instance;
     }
-    return self::$instance;
-}
 
-    
+
     /**
      * Establish database connection
      */
@@ -246,7 +248,7 @@ class Database
      */
     public function update($table, $data, $where, $whereParams)
     {
-        $setClause = implode(', ', array_map(fn($key) => "{$key} = ?", array_keys($data)));
+        $setClause = implode(', ', array_map(fn ($key) => "{$key} = ?", array_keys($data)));
         $sql = "UPDATE {$table} SET {$setClause} WHERE {$where}";
 
         $params = array_merge(array_values($data), $whereParams);
@@ -315,4 +317,3 @@ class Database
         $this->close();
     }
 }
-?>
